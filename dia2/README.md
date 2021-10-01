@@ -1,0 +1,1 @@
+# Terraform - Gerenciamento de Estados e Workspaces
