@@ -8,6 +8,16 @@ terraform {
   }
 }
 
+terraform {
+    backend "s3" {
+        bucket         = "turma12638-state"
+        key            = "dev/terraform.tfstate"
+        region         = "us-east-2"
+        dynamodb_table = "turma12638-lock"
+        encrypt        = true 
+    }    
+}
+
 provider "aws" {
   region     = var.region
 }
@@ -58,8 +68,8 @@ resource "aws_autoscaling_group" "asg-t12638" {
   target_group_arns = [aws_lb_target_group.tg-t12638.arn]
   health_check_type = "ELB"
 
-  desired_capacity = 0
-  min_size         = 0
+  desired_capacity = 2
+  min_size         = 2
   max_size         = 10
 
   tag {
