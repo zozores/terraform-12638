@@ -22,18 +22,23 @@ provider "aws" {
   region     = var.region
 }
 
+locals {
+  instance_type = value
+}
+
+
 # Modulo dentro do filesystem local
 module "webserver_cluster" {
     source                       = "../modules/webserver-cluster"
 
-    instance_type                = terraform.workspace == "prod" ? var.prod_instance_type : var.default_instance_type
-    mensagem                     = terraform.workspace == "prod" ? var.prod_mensagem : var.default_mensagem
-    alb_name                     = terraform.workspace == "prod" ? var.prod_alb_name : var.default_alb_name
-    instance_security_group_name = terraform.workspace == "prod" ? var.prod_instance_security_group_name : var.default_instance_security_group_name
-    alb_security_group_name      = terraform.workspace == "prod" ? var.prod_alb_security_group_name : var.default_alb_security_group_name
-    asg_desired_capacity         = terraform.workspace == "prod" ? var.prod_asg_desired_capacity : var.default_asg_desired_capacity
-    asg_min_size                 = terraform.workspace == "prod" ? var.prod_asg_min_size : var.default_asg_min_size
-    asg_max_size                 = terraform.workspace == "prod" ? var.prod_asg_max_size : var.default_asg_max_size
+    instance_type                = terraform.workspace == "prod" ? "t3.micro" : "t2.micro"
+    mensagem                     = terraform.workspace == "prod" ? "Olá, PRD" : "Olá, HML"
+    alb_name                     = terraform.workspace == "prod" ? "alb-prd" : "alb-hml"
+    instance_security_group_name = terraform.workspace == "prod" ? "sginstance-prd" : "sginstance-hml"
+    alb_security_group_name      = terraform.workspace == "prod" ? "sgalb-prd" : "sgalb-hml"
+    asg_desired_capacity         = terraform.workspace == "prod" ? 4 : 2
+    asg_min_size                 = terraform.workspace == "prod" ? 4 : 2
+    asg_max_size                 = terraform.workspace == "prod" ? 10 : 2
     region                       = var.region
 }
 
